@@ -45,7 +45,6 @@ unsigned int CCalEcalOrganization::GetUnitID(const G4Step* aStep) const {
 
   int idl=0, idn=0;
   int level = theTouchable->GetHistoryDepth();
-  std::cout << level << std::endl ;  
   int idx = theTouchable->GetReplicaNumber( 0 ) - 1;
   if ( level > 0 ) {
     idl = theTouchable->GetReplicaNumber( 1 ) - 1;
