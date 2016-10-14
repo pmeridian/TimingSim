@@ -63,7 +63,7 @@ public:
   void InsertTimeProfile(int, double, double); 
 
   void setNtuple(float* hcalE, float* ecalE, float elab, float x, float y, 
-		 float z, float edep, float edec, float edhc);
+		 float z, float edep, float edec, float edhc, float edtd);
 
   static CCalAnalysis* getInstance();
 

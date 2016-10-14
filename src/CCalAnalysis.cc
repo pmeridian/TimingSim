@@ -84,6 +84,7 @@ CCalAnalysis::CCalAnalysis() :
   analysisManager->CreateNtupleFColumn("EDEP");
   analysisManager->CreateNtupleFColumn("EDEC");
   analysisManager->CreateNtupleFColumn("EHDC");
+  analysisManager->CreateNtupleFColumn("EDTD");
   analysisManager->FinishNtuple();
 
   //
@@ -275,7 +276,7 @@ void CCalAnalysis::InsertTimeProfile(int hit, double time, double edep)
 
 void CCalAnalysis::setNtuple(float* HCalE, float* ECalE, float elab, 
 			     float x, float y, float z, float edep, 
-			     float edec, float edhc) 
+			     float edec, float edhc, float edtd) 
 {
   G4AnalysisManager* man = G4AnalysisManager::Instance();  
   G4int counter=0;
@@ -296,6 +297,7 @@ void CCalAnalysis::setNtuple(float* HCalE, float* ECalE, float elab,
   man->FillNtupleFColumn(counter+4,edep);
   man->FillNtupleFColumn(counter+5,edec);
   man->FillNtupleFColumn(counter+6,edhc);
+  man->FillNtupleFColumn(counter+7,edtd);
 
   man->AddNtupleRow();  
 

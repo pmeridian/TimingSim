@@ -49,11 +49,11 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
 #endif
 
   //Let's open the file
-  G4cout << " ==> Opening file " << filename << " to read magnetic field..."
-	 << G4endl;
   G4String pathName = getenv("CCAL_GLOBALPATH");
   std::ifstream is;
   bool ok = openGeomFile(is, pathName, filename);
+  std::cout << " ==> Opening file " << filename << " to read magnetic field... "
+	    << ok << std::endl;
   
   if (ok) {
     findDO(is, G4String("FLDM"));
@@ -119,7 +119,12 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const
   if (scor < 0.) scor = 0.;
   if (scor > 1.) scor = 1.0;
 
-  B[2] = scor*fval*kilogauss;
+  //  B[2] = scor*fval*kilogauss;
+  if (x[0]>-1000.*mm) 
+    B[2] = fval*kilogauss;
+  else
+    B[2] = 0.*kilogauss;
+
   if (fVerbosity)
     {
 

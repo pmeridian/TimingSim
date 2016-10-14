@@ -79,28 +79,55 @@ G4VPhysicalVolume* CCalG4Tdet::constructIn(G4VPhysicalVolume* mother) {
   CCalMaterialFactory* matfact = CCalMaterialFactory::getInstance();
   
   //Actual construction of the timing detector
-  G4String name("Null");
-  double radiation_length = 0.3504*cm;
+
+  //Mother volume
+  G4Material* matter = matfact->findMaterial("Air");
+  G4VSolid*   solid  = new G4Box (idName, 100*mm, 200*mm,
+				  200*mm);
+  G4LogicalVolume* logt = new G4LogicalVolume(solid, matter, idName);
+  setVisType(CCalVisualisable::PseudoVolumes,logt);
+  G4double xp = -1024*mm;
+  G4PVPlacement* timing = new G4PVPlacement(0,G4ThreeVector(xp,0,0),
+					  idName, logt, mother, false, 1);
+  G4String nameAbs("Null");
+  double radiation_length_abs = 0.3504*cm;
   nameAbs = "TimeAbs";
   G4Material* matterAbs = matfact->findMaterial(getTimeMatAbs());
-  G4VSolid* solidAbs = new G4Box (name, 0.5*getNRadiationLengthAbs()*radiation_length, 0.5*getDyTimeAbs()*mm, 0.5*getDzTimeAbs()*mm);
+  G4VSolid* solidAbs = new G4Box (nameAbs, 0.5*getNRadiationLengthAbs()*radiation_length_abs, 0.5*getDyTimeAbs()*mm, 0.5*getDzTimeAbs()*mm);
   G4LogicalVolume* tlogAbs = new G4LogicalVolume (solidAbs, matterAbs, nameAbs);
   setVisType(CCalVisualisable::Sensitive,tlogAbs);
-  G4double xpAbs = (-232-1033-getXPOSAbs()-0.5*getNRadiationLengthAbs()*radiation_length-9.)*mm;
-  G4PVPlacement* timingdetAbs = new G4PVPlacement(0, G4ThreeVector(xpAbs,0,0),tlogAbs,nameAbs,mother->GetLogicalVolume(),false, 0);
+  G4double xpAbs = (-getXPOSAbs()-0.5*getNRadiationLengthAbs()*radiation_length_abs)*mm;
+  new G4PVPlacement(0, G4ThreeVector(xpAbs,0,0),tlogAbs,nameAbs,logt,false, 1);
 
+  G4String nameSens("Null");
   nameSens = "TimeSens";
+  double radiation_length_sens = 1.143*cm;
   G4Material* matterSens = matfact->findMaterial(getTimeMatSens());
-  G4VSolid* solidSens = new G4Box (name, 0.5*getNRadiationLengthSens()*radiation_length, 0.5*getDyTimeSens()*mm, 0.5*getDzTimeSens()*mm);
+  G4VSolid* solidSens = new G4Box (nameSens, 0.5*getNRadiationLengthSens()*radiation_length_sens, 0.5*getDyTimeSens()*mm, 0.5*getDzTimeSens()*mm);
   G4LogicalVolume* tlogSens = new G4LogicalVolume (solidSens, matterSens, nameSens);
+  sensitiveLogs.push_back(tlogSens);
+
   setVisType(CCalVisualisable::Sensitive,tlogSens);
-  G4double xpSens = (-232-1033-getXPOSSens()-0.5*getNRadiationLengthSens()*radiation_length-9.)*mm;
-  G4PVPlacement* timingdetSens = new G4PVPlacement(0, G4ThreeVector(xpSens,0,0),tlogSens,nameSens,mother->GetLogicalVolume(),false, 0);
+  G4double xpSens = (-getXPOSSens()-0.5*getNRadiationLengthSens()*radiation_length_sens)*mm;
+  new G4PVPlacement(0, G4ThreeVector(xpSens,0,0),tlogSens,nameSens,logt,false, 1);
 
-
-  return timingdet;
+  return timing;
 
 }
   
+void CCalG4Tdet::constructSensitive() {
+
+  if (sensitiveLogs.size()>0) {
+    CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
+    G4String SDname = idName;
+    for(std::vector<ptrG4Log>::iterator iter=sensitiveLogs.begin(); 
+	                           iter<sensitiveLogs.end(); iter++) {
+      sensDets->registerVolume(SDname, (*iter));
+      std::cout << "Register volume " << (*iter)->GetName() << " for" << SDname 
+		<< std::endl;
+    }
+  }
+
+}
 
 			  

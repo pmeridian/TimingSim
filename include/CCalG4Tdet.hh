@@ -36,6 +36,8 @@
 
 //typedef G4LogicalVolume* ptrG4Log;
 
+typedef G4LogicalVolume* ptrG4Log;
+
 class CCalG4Tdet: public CCalTdet, public CCalG4Able {
 public:
 
@@ -49,6 +51,15 @@ public:
 protected:
   //This methods actually constructs the volume.
   virtual G4VPhysicalVolume* constructIn(G4VPhysicalVolume*);
+
+  //Constructs the sensitive detectors and associates them to the corresponding
+  //logical volumes
+  virtual void constructSensitive() ;
+
+private:
+
+  // Logical volumes for sensitive detectors
+  std::vector<ptrG4Log> sensitiveLogs;
 
 };
 

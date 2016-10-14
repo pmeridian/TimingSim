@@ -46,6 +46,7 @@
 #include "CCalSensitiveConfiguration.hh"
 #include "CCalEcalOrganization.hh"
 #include "CCalHcalOrganization.hh"
+#include "CCalTdetOrganization.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
@@ -91,16 +92,18 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
   static G4bool fieldIsInitialized = false;
   //And finally that it was not initialized previously
   if (!fieldIsInitialized) {
+    std::cout << "Initializing Magnetic field" << std::endl;
     CCalMagneticField* ccalField=new CCalMagneticField("fmap.tb96");
     G4double field = ccalField->GetConstantFieldvalue();
     if (field == 0) {
-      ccalField = NULL;
+    std::cout << "Null Magnetic field" << std::endl;
       G4cout << "***************************" << G4endl
 	     << "*                         *" << G4endl
 	     << "*  Magnetic Field is off  *" << G4endl
 	     << "*                         *" << G4endl
-	     << "***************************" << G4endl;
+		<< "***************************" << G4endl;
     } else {
+      std::cout << "Magnetic field is ON" << std::endl;
       G4cout << "***************************" << G4endl
 	     << "*                         *" << G4endl
 	     << "*  Magnetic Field is on   *" << G4endl
@@ -166,6 +169,11 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
     getSensitiveFlag("CrystalMatrixModule");
   if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
 		     addCaloSD("CrystalMatrix", new CCalEcalOrganization);
+
+  sensitive = CCalSensitiveConfiguration::getInstance()->
+    getSensitiveFlag("TimingDetector");
+  if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
+		     addCaloSD("TimingDetector", new CCalTdetOrganization);
 
   //Assign the sensitive detectors
   /*result =*/ CCalSensAssign::getInstance()->assign();

@@ -57,9 +57,9 @@ int CCalTdet::readFile() {
   readName(is,timeMat_Sens);
   is  >> dyTime_Sens >> dzTime_Sens >> XPOS_Sens >> N_radiation_length_Sens >> jump ;
   
-  std::cout << " ==> TT absorber detector dimensions read " << "," << dyTime_Abs << "," << dzTime_Abs
+  std::cout << " ==> TT absorber detector dimensions read " << timeMat_Abs << "," << dyTime_Abs << "," << dzTime_Abs
        << std::endl;
-  std::cout << " ==> TT sensitive detector dimensions read " << "," << dyTime_Sens << "," << dzTime_Sens
+  std::cout << " ==> TT sensitive detector dimensions read " << timeMat_Sens << "," << dyTime_Sens << "," << dzTime_Sens
        << std::endl;
    
   ///////////////////////////////////////////////////////////////

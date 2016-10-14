@@ -161,7 +161,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
        << 0.5*getLengBox()*mm << G4endl;
 #endif
   G4LogicalVolume* glog = new G4LogicalVolume (solid, matter, idName);
-  setVisType(CCalVisualisable::Sensitive,glog);
+  setVisType(CCalVisualisable::PseudoVolumes,glog);
 
   //Now the layers
   G4String name = idName + "Layer";

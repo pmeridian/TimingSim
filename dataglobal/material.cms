@@ -65,6 +65,7 @@
 "Cerium"       Ce     140.12   58.      6.637       0.0         0.0
 "Praseodymium" Pr     140.9077 59.      0.0         0.0         0.0
 "Neodymium"    Nm     144.24   60.      0.0         0.0         0.0
+"Lutetium"     Lu     174.97   71.      9.84       0.70       21.92
 "Tungsten"     W      183.85   74.      19.3       0.35         9.5855
 "Gold"         Au     196.97   79.      18.85       0.0         0.0
 "Lead"         Pb     207.19   82.      11.350     0.56120      17.092
@@ -754,6 +755,10 @@
           "Silicon"               0.283286
           "Calcium"               1.303120
           "Lead"                 59.631700
+"T_LSO"                     3    7.40     #. LSO for tdet	
+          "Lutetium"              76.40
+          "Silicon"                6.13             
+          "Oxygen"		  17.47
 "E_PbWO4"                     3    8.28     #. Lead tungstate for crystals
           "Lead"                 -1.00
           "Tungsten"             -1.00

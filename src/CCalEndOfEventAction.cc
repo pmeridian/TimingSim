@@ -50,7 +50,7 @@
 
 #include "CCalAnalysis.hh"
 
-//#define debug
+#define debug
 //#define ddebug
 
 
@@ -136,7 +136,7 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   //
   
   //Now make summary
-  float hcalE[28], ecalE[49], fullE=0., edec=0, edhc=0;
+  float hcalE[28], ecalE[49], fullE=0., edec=0, edhc=0, edtd=0, tdetE=0;
   int i = 0;
   for (i = 0; i < 28; i++) {hcalE[i]=0.;}
   for (i = 0; i < 49; i++) {ecalE[i]=0.;}
@@ -177,6 +177,9 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 	    if (unitID > 0 && unitID < 29) {
 	      id = unitID - 1; // HCal
 	      hcalE[id] += En/GeV;
+	    }
+	    if (unitID == 999999) {
+	      tdetE += En/GeV;
 	    } else {
 	      int i0 = unitID/4096;
 	      int i1 = (unitID/64)%64;
@@ -205,6 +208,8 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
       edhc = edep[i];
     } else if (SDnames[i] == "CrystalMatrix") {
       edec = edep[i];
+    } else if (SDnames[i] == "TimingDetector") {
+      edtd = edep[i];
     }
   }
 
@@ -220,7 +225,7 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   analysis->InsertEnergy(fullE);
   analysis->InsertEnergyHcal(hcalE);
   analysis->InsertEnergyEcal(ecalE);
-  analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc);
+  analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc, edtd);
   analysis->EndOfEvent(nhit);
   for (i = 0; i < numberOfSD; i++){
     int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
